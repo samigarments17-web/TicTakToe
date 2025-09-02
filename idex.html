@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+
+<!-- AdSense verification & loader -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6560387888716518"
+     crossorigin="anonymous"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f3f3f3;
+    padding: 20px;
+}
+h1 {
+    color: #333;
+}
+.game-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    gap: 5px;
+    justify-content: center;
+    margin: 20px auto;
+}
+.cell {
+    width: 100px;
+    height: 100px;
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 2px solid #ccc;
+    cursor: pointer;
+}
+.buttons {
+    margin-top: 15px;
+}
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+}
+.ads-container {
+    margin: 20px auto;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+
+<h1>Tic Tac Toe</h1>
+
+<!-- Buttons -->
+<div class="buttons">
+    <button onclick="startComputerGame()">Play with Computer</button>
+    <button onclick="playOnline()">Play Online</button>
+    <button onclick="previewGame()">Preview</button>
+</div>
+
+<!-- Game Board -->
+<div class="game-container" id="board">
+    <div class="cell" onclick="makeMove(0)"></div>
+    <div class="cell" onclick="makeMove(1)"></div>
+    <div class="cell" onclick="makeMove(2)"></div>
+    <div class="cell" onclick="makeMove(3)"></div>
+    <div class="cell" onclick="makeMove(4)"></div>
+    <div class="cell" onclick="makeMove(5)"></div>
+    <div class="cell" onclick="makeMove(6)"></div>
+    <div class="cell" onclick="makeMove(7)"></div>
+    <div class="cell" onclick="makeMove(8)"></div>
+</div>
+
+<h2 id="status">Click a button to start!</h2>
+
+<!-- AdSense Block -->
+<div class="ads-container">
+    <!-- vertical -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6560387888716518"
+         data-ad-slot="1240802509"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<script>
+let board = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "X";
+let gameActive = false;
+let vsComputer = false;
+
+function startComputerGame() {
+    resetBoard();
+    vsComputer = true;
+    gameActive = true;
+    document.getElementById("status").innerText = "Your turn!";
+}
+
+function playOnline() {
+    alert("Online mode requires server setup. Currently not available.");
+}
+
+function previewGame() {
+    resetBoard();
+    vsComputer = false;
+    gameActive = true;
+    document.getElementById("status").innerText = "Preview mode! Click cells to play.";
+}
+
+function makeMove(index) {
+    if (!gameActive || board[index] !== "") return;
+    board[index] = currentPlayer;
+    document.getElementsByClassName("cell")[index].innerText = currentPlayer;
+    if (checkWinner()) {
+        document.getElementById("status").innerText = currentPlayer + " wins!";
+        gameActive = false;
+        return;
+    }
+    if (!board.includes("")) {
+        document.getElementById("status").innerText = "It's a draw!";
+        gameActive = false;
+        return;
+    }
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+    if (vsComputer && currentPlayer === "O") {
+        setTimeout(computerMove, 500);
+    }
+}
+
+function computerMove() {
+    let emptyCells = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+    let move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    makeMove(move);
+}
+
+function checkWinner() {
+    const combos = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
+    for (let combo of combos) {
+        let [a,b,c] = combo;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function resetBoard() {
+    board = ["", "", "", "", "", "", "", "", ""];
+    let cells = document.getElementsByClassName("cell");
+    for (let cell of cells) {
+        cell.innerText = "";
+    }
+    currentPlayer = "X";
+}
+</script>
+
+</body>
+</html>
